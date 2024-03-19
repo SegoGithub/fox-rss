@@ -4,25 +4,25 @@ import os.path
 from feedgen.feed import FeedGenerator
 
 fg = FeedGenerator()
-fg.title('FoxRSS')
+fg.title('OnlyFoxes')
 fg.id('https://github.com/YuaFox/lynx-iberian')
-fg.link( href='https://fox.sego.app/rss.xml', rel='self' )
-fg.subtitle('the coolest feed ever cuz it has foxes')
+fg.link( href='https://fox.sego.app/', rel='self' )
+fg.subtitle('the coolest feed ever cuz it has only foxes')
 fg.language('en')
 
 if not os.path.exists('page'):
     with open("page", "w", encoding="utf-8") as f:
         f.write("0")
-        attempts = 0
+        page = 0
 else:
     with open("page", "r+", encoding="utf-8") as f:
-        attempts = int(f.read())
+        page = int(f.read())
         f.seek(0)
-        f.write(str(attempts + 1))
+        f.write(str(page + 1))
         f.truncate()
-        attempts = attempts + 1
+        page = page + 1
 
-response = requests.get(f"https://foxes.cat/api/v1/media?page={attempts}").json()
+response = requests.get(f"https://foxes.cat/api/v1/media?page={page}").json()
 
 def storage_resolver(path):
     service = path.split("/")[1]
@@ -32,19 +32,27 @@ def storage_resolver(path):
     elif service == "flickr":
         return("https://farm2.staticflickr.com/1103/" + filename, mimetypes.guess_type(filename)[0])
     elif service == "local":
+        # this doesn't work for some reason
         return("https://foxes.cat/" + filename, mimetypes.guess_type(filename)[0])
 
 for fox in response:
 
+    # entries using storage/local will not be added as they can't be accessed
+    if fox["path"].split("/")[1] == "local":
+        break
+
     fe = fg.add_entry()
-    fe.id(fox["source"].split("/")[-1])
     fe.link(href=fox["source"])
     fe.content(content=f"Source: <a href=\"{fox["source"]}\">{fox["source"]}</a>", type="CDATA")
+    fe.id(fox["source"].split("/")[-1])
 
     image = storage_resolver(fox["path"])
     fe.enclosure(image[0], 0, image[1])
 
     if "subreddit" in fox:
+        fe.title(fox["title"])
+        if fox["caption"]:
+            fe.description(fox["caption"])
         if fox["tag"]:
             fe.category([{"term": fox["tag"], "label": fox["tag"]}])
     elif "flickrId" in fox:
@@ -58,8 +66,8 @@ for fox in response:
             tags.append({"term": tag["_content"], "label": tag["raw"]})
         fe.category(tags)
     else:
-
         fe.title("Cute fox :3c")
         fe.author(name=fox["author"])
 
 fg.rss_file('rss.xml')
+fg.atom_file('atom.xml')
