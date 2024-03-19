@@ -32,6 +32,8 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             <meta charset="UTF-8"> 
             <title>OnlyFox - RSS Feed of Foxes 🦊</title>
             <link rel='stylesheet' href='https://cdn.simplecss.org/simple.min.css'>
+            <link rel="alternate" type="application/rss+xml" href="https://fox.sego.app/rss.xml" title="OnlyFox RSS Feed" />
+            <link rel="alternate" type="application/atom+xml" href="https://fox.sego.app/atom.xml" title="OnlyFox ATOM Feed" />
             </head>
             <body>
             <div style='text-align:center'>

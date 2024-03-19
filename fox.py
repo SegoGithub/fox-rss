@@ -41,13 +41,16 @@ for fox in response:
     
     if fox["caption"]:
         fe.description(fox["caption"])
+    
     if fox["author"]:
-        fe.author(fox["author"])
+        fe.author(name=fox["author"])
     else:
         fe.author(name="Unknown")
     
     image = storage_resolver(fox["path"], fox["id"])
-    fe.link(link=[{"href": image[0], "type": image[1], "rel": "enclosure"}])
+    # if enclosure doesnt work with atom, its an issue with python-feedgen
+    # also Kiesow, PLEASE MERGE https://github.com/lkiesow/python-feedgen/pull/136 I BEG YOU!!!
+    fe.enclosure(url=image[0], length='0', type=image[1])
 
     fe.id(image[0])
 
