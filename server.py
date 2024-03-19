@@ -37,7 +37,7 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             <div style='text-align:center'>
             <h2>OnlyFox - RSS Feed of Foxes 🦊</h2>
             RSS: <a href='https://fox.sego.app/rss.xml'>https://fox.sego.app/rss.xml</a> <br>
-            ATOM: <a href='https://fox.sego.app/rss.xml'>https://fox.sego.app/atom.xml</a> <br>
+            ATOM: <a href='https://fox.sego.app/atom.xml'>https://fox.sego.app/atom.xml</a> <br>
             Source: <a href='https://github.com/SegoGithub/fox-rss'>https://github.com/SegoGithub/fox-rss</a> <br>
             Powered by: <a href='https://github.com/YuaFox/lynx-iberian'>https://github.com/YuaFox/lynx-iberian</a>
             <h3>Currently on page</h3>
