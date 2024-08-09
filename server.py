@@ -1,8 +1,5 @@
 import http.server
 import socketserver
-import schedule
-import time
-import fox
 
 class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -54,11 +51,6 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(bytes(html, "utf8"))
 
             return
-
-def update_rss():
-    import fox
-
-schedule.every().day.do(update_rss)
 
 handler_object = HttpRequestHandler
 
